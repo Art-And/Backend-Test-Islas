@@ -38,12 +38,10 @@ SESSION_COOKIE_HTTPONLY = True
 SERVER_URL = os.getenv("SERVER_URL", default="*")
 
 
-APPEND_SLASH = False
+APPEND_SLASH = True
 
 # Users and Authentication
 AUTH_USER_MODEL = 'users.User'
-
-
 
 # Application definition
 
@@ -140,16 +138,22 @@ CACHES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME":
+            "django.contrib.auth."
+            "password_validation.UserAttributeSimilarityValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "NAME":
+            "django.contrib.auth."
+            "password_validation.MinimumLengthValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+        "NAME":
+            "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+        "NAME":
+            "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -168,7 +172,6 @@ USE_L10N = True
 USE_TZ = True
 
 
-
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
     "DEFAULT_AUTHENTICATION_CLASSES": [
@@ -184,14 +187,16 @@ if getenv("BROWSABLE_API_RENDERER", default=False, coalesce=bool):
 # APP SPECIFIC SETTINGS
 
 # if getenv("SENTRY_DSN", default=None):
-#    sentry_sdk.init(dsn=getenv("SENTRY_DSN"), integrations=[DjangoIntegration()])
+#    sentry_sdk.init(dsn=getenv("SENTRY_DSN"),
+#       integrations=[DjangoIntegration()])
 
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": True,
     "formatters": {
         "fluent_formatter": {
-            "()": "backend_test.logging_formatter.VerboseFluentRecordFormatter",
+            "()":
+                "backend_test.logging_formatter.VerboseFluentRecordFormatter",
             "format": {
                 "level": "%(levelname)s",
                 "pathname": "%(pathname)s",
@@ -216,7 +221,8 @@ LOGGING = {
             "style": "{",
         },
     },
-    "filters": {"require_debug_true": {"()": "django.utils.log.RequireDebugTrue"}},
+    "filters": {"require_debug_true": {
+        "()": "django.utils.log.RequireDebugTrue"}},
     "handlers": {
         "sentry": {
             "level": "WARNING",
