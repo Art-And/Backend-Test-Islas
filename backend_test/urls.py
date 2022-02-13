@@ -30,4 +30,6 @@ urlpatterns = [
     path('', include(('menu.users.urls', 'users'), namespace='user')),
     # path("healthz", healthz, name="healthz"),
 ]
+
+# If you want to show media in dev, please add next line of code to show it.
 # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
