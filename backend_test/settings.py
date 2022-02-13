@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import environ
 
 from .envtools import getenv
 
@@ -18,8 +19,12 @@ from .envtools import getenv
 # from sentry_sdk.integrations.django import DjangoIntegration
 
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+"""
+Build paths inside the project used the next dependency
+src: https://django-environ.readthedocs.io/en/latest/getting-started.html"""
+BASE_DIR = environ.Path(__file__) - 3
+APPS_DIR = BASE_DIR.path('menu')
+env = environ.Env()
 
 SECRET_KEY = getenv("SECRET_KEY", default="###SECRET_KEY###")
 
@@ -33,21 +38,32 @@ SESSION_COOKIE_HTTPONLY = True
 SERVER_URL = os.getenv("SERVER_URL", default="*")
 
 
-APPEND_SLASH = False
+APPEND_SLASH = True
+
+# Users and Authentication
+AUTH_USER_MODEL = 'users.User'
 
 # Application definition
 
-INSTALLED_APPS = [
+DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+]
+THIRD_PARTY_APPS = [
     "rest_framework",
     "django_extensions",
-    "backend_test.utils",
 ]
+LOCAL_APPS = [
+    "backend_test.utils",
+    'menu.users.apps.UsersAppConfig',
+]
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+
+ROOT_URLCONF = "backend_test.urls"
 
 MIDDLEWARE = [
     "backend_test.middleware.HealthCheckAwareSessionMiddleware",
@@ -61,12 +77,20 @@ MIDDLEWARE = [
     "backend_test.middleware.HeaderNoCacheMiddleware",
 ]
 
-ROOT_URLCONF = "backend_test.urls"
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/3.0/howto/static-files/
+STATIC_ROOT = os.path.join(BASE_DIR, "../collected_static")
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [
+    str(APPS_DIR.path('static'))
+]
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [
+            str(APPS_DIR.path('templates')),
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -78,6 +102,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = "backend_test.wsgi.application"
 
@@ -113,16 +138,22 @@ CACHES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME":
+            "django.contrib.auth."
+            "password_validation.UserAttributeSimilarityValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "NAME":
+            "django.contrib.auth."
+            "password_validation.MinimumLengthValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+        "NAME":
+            "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+        "NAME":
+            "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -141,11 +172,6 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, "../collected_static")
-STATIC_URL = "/static/"
-
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
     "DEFAULT_AUTHENTICATION_CLASSES": [
@@ -161,14 +187,16 @@ if getenv("BROWSABLE_API_RENDERER", default=False, coalesce=bool):
 # APP SPECIFIC SETTINGS
 
 # if getenv("SENTRY_DSN", default=None):
-#    sentry_sdk.init(dsn=getenv("SENTRY_DSN"), integrations=[DjangoIntegration()])
+#    sentry_sdk.init(dsn=getenv("SENTRY_DSN"),
+#       integrations=[DjangoIntegration()])
 
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": True,
     "formatters": {
         "fluent_formatter": {
-            "()": "backend_test.logging_formatter.VerboseFluentRecordFormatter",
+            "()":
+                "backend_test.logging_formatter.VerboseFluentRecordFormatter",
             "format": {
                 "level": "%(levelname)s",
                 "pathname": "%(pathname)s",
@@ -193,7 +221,8 @@ LOGGING = {
             "style": "{",
         },
     },
-    "filters": {"require_debug_true": {"()": "django.utils.log.RequireDebugTrue"}},
+    "filters": {"require_debug_true": {
+        "()": "django.utils.log.RequireDebugTrue"}},
     "handlers": {
         "sentry": {
             "level": "WARNING",
