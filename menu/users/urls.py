@@ -4,8 +4,9 @@
 from django.urls import path
 
 # Local
-from menu.users.views import list_users
+from menu.users.views import hello_users, login_view
 
 urlpatterns = [
-    path('users/', list_users)
+    path('users/', hello_users, name='hello_world'),
+    path('users/login/', login_view, name='login'),
 ]
