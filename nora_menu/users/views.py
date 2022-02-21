@@ -4,10 +4,10 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
-from django.db import IntegrityError
 
 # Local
 from nora_menu.users.models import User
+from nora_menu.users.forms import SignupForm
 
 
 def login_view(request):
@@ -17,15 +17,16 @@ def login_view(request):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
-        if user:
-            login(request, user)
-            return redirect('menu:add_menu')
-        else:
+
+        if not user:
             return render(
                 request,
                 'users/login.html',
                 {'error': 'Invalid username and password'}
             )
+
+        login(request, user)
+        return redirect('menu:add_menu')
 
     return render(request=request, template_name='users/login.html')
 
@@ -34,40 +35,48 @@ def signup_view(request):
     """Signup a User"""
 
     if request.method == 'POST':
-        email = request.POST['email_username']
-        username = request.POST['user_name']
-        password = request.POST['password']
-        password_confirmation = request.POST['password_confirmation']
 
-        if password != password_confirmation:
-            return render(
-                request,
-                'users/signup.html',
-                {'error': 'Password confirmation does not match'}
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
 
-            )
+            email = data['email']
+            username = data['username']
+            password = data['password']
+            password_confirmation = data['password_confirmation']
 
-        try:
+            if password != password_confirmation:
+                return render(
+                    request,
+                    'users/signup.html',
+                    {
+                        'form': {
+                            'errors': 'Password confirmation does not match',
+                        }
+                    }
+                )
+
             user = User.objects.create_user(
                 email=email,
                 password=password,
                 username=username)
-        except IntegrityError as error:
 
-            return render(
-                request,
-                'users/signup.html',
-                {'error': error}
-            )
+            user.first_name = data['first_name']
+            user.last_name = data['last_name']
+            user.phone_number = data['phone_number']
+            user.save()
 
-        user.first_name = request.POST['first_name']
-        user.last_name = request.POST['last_name']
-        user.phone_number = request.POST['phone_number']
-        user.save()
+            return redirect('users:login')
+    else:
+        form = SignupForm()
 
-        return redirect('users:login')
-
-    return render(request=request, template_name='users/signup.html')
+    return render(
+        request=request,
+        template_name='users/signup.html',
+        context={
+            'form': form,
+        }
+    )
 
 
 @login_required

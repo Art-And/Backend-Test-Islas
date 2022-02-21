@@ -77,6 +77,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "backend_test.middleware.HeaderNoCacheMiddleware",
+    "backend_test.middleware.RedirectToMenuMiddleware"
 ]
 
 # Static files (CSS, JavaScript, Images)
