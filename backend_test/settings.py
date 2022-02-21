@@ -22,8 +22,9 @@ from .envtools import getenv
 """
 Build paths inside the project used the next dependency
 src: https://django-environ.readthedocs.io/en/latest/getting-started.html"""
-BASE_DIR = environ.Path(__file__) - 3
-APPS_DIR = BASE_DIR.path('menu')
+
+BASE_DIR = environ.Path(__file__) - 2
+APPS_DIR = BASE_DIR.path('nora_menu')
 env = environ.Env()
 
 SECRET_KEY = getenv("SECRET_KEY", default="###SECRET_KEY###")
@@ -59,7 +60,8 @@ THIRD_PARTY_APPS = [
 ]
 LOCAL_APPS = [
     "backend_test.utils",
-    'menu.users.apps.UsersAppConfig',
+    'nora_menu.users.apps.UsersAppConfig',
+    'nora_menu.menu.apps.MenuAppConfig',
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -103,9 +105,7 @@ TEMPLATES = [
     },
 ]
 
-
 WSGI_APPLICATION = "backend_test.wsgi.application"
-
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -171,6 +171,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOGIN_URL = '/users/login/'
 
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
