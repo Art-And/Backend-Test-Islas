@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 # Local
-from menu.users.models import User
+from nora_menu.users.models import User
 
 
 class CustomUserAdmin(UserAdmin):

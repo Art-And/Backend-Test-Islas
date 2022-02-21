@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block head_content %}
+    <title>Nora Menu</title>
+{% endblock%}
+
+{% block container %}
+
+    <h1 class='pt-5' >Please add a Menu</h1>
+
+    <form method="POST" action="{% url "menu:add_menu" %}" class='pt-4'>
+        {% csrf_token %}
+
+        <div class="form-group pt-3">
+            <textarea class="form-control" type="" placeholder="title Menu or greetings" name=""> </textarea>
+        </div>
+
+        <div class="form-group pt-3">
+            <input class="form-control" type="text" placeholder="Username" name="" />
+        </div>
+
+        <div class="form-group pt-3">
+            <input class="form-control" type="text" placeholder="Password" name="" />
+        </div>
+
+        <div class="form-group pt-3">
+            <input class="form-control" type="text" placeholder="Username" name="" />
+        </div>
+
+        <div class="form-group pt-3">
+            <input class="form-control" type="text" placeholder="Password" name="" />
+        </div>
+
+        <div class="form-group pt-3">
+            <input class="form-control" type="date" placeholder="Password" name="" />
+        </div>
+
+        <button class="btn btn-primary btn-block mt-5" type="submit">Create menu</button>
+
+    </form>
+
+{% endblock %}

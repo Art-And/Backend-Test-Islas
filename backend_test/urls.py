@@ -16,19 +16,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.conf import settings
-from django.conf.urls.static import static
+# from django.conf import settings
+# from django.conf.urls.static import static
+
 from django.urls import path, include
 from django.contrib import admin
 
-# from .utils.healthz import healthz
-
 urlpatterns = [
     # Django Admin
-    path('admin_menu', admin.site.urls),
+    path('admin_', admin.site.urls),
 
-    path('', include(('menu.users.urls', 'users'), namespace='user')),
-    # path("healthz", healthz, name="healthz"),
+    path('', include(('nora_menu.users.urls', 'users'), namespace='user')),
+    path('', include(('nora_menu.menu.urls', 'menu'), namespace='menu')),
 ]
 
 # If you want to show media in dev, please add next line of code to show it.
