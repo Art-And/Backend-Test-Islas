@@ -171,6 +171,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOGIN_URL = '/users/login/'
 
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],

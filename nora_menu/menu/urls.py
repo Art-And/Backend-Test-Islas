@@ -7,5 +7,5 @@ from django.urls import path
 from nora_menu.menu.views import admin_view
 
 urlpatterns = [
-    path('menu/', admin_view, name='admin'),
+    path('menu/', admin_view, name='add_menu'),
 ]

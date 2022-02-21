@@ -7,17 +7,10 @@ from django.db import models
 class Option(models.Model):
     """Option model."""
 
-    name = models.CharField(
-        'label name',
+    meal = models.CharField(
+        'meal name',
         max_length=255,
-        help_text=('meal option name')
-    )
-    text_option = models.TextField(
-        blank=True,
-        null=True,
-        help_text=(
-            'meal text'
-        )
+        help_text=('meal option')
     )
 
 
@@ -35,12 +28,9 @@ class Menu(models.Model):
         )
     )
 
-    option_meals = models.ForeignKey(
+    option_meals = models.ManyToManyField(
         to='option',
         related_name='meals',
-        blank=True,
-        null=True,
-        on_delete=models.CASCADE,
     )
 
     agreed_date = models.DateField(null=True, blank=True, default=None)

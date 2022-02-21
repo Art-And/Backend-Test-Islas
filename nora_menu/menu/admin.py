@@ -21,6 +21,5 @@ class OptionAdmin(admin.ModelAdmin):
     """Option model admin."""
 
     list_display = (
-        'name',
-        'text_option',
+        'meal',
     )

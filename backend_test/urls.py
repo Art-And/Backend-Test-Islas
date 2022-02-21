@@ -24,7 +24,7 @@ from django.contrib import admin
 
 urlpatterns = [
     # Django Admin
-    path('admin_menu', admin.site.urls),
+    path('admin_', admin.site.urls),
 
     path('', include(('nora_menu.users.urls', 'users'), namespace='user')),
     path('', include(('nora_menu.menu.urls', 'menu'), namespace='menu')),
